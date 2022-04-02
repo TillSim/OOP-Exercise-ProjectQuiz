@@ -1,9 +1,7 @@
 public class Question {
 
     private String question, optionA, optionB, optionC, optionD;
-
     private char correctOption;
-
     private boolean isDrawn;
     //  isDrawn is used to flag "Question"-objects as 'already played' so that players don't get questions twice in one game.
 
@@ -20,10 +18,12 @@ public class Question {
     }
     //  The "Question"-constructor uses an "questionElements"-array that holds all attributes.
     
+    
     public void print(){
         System.out.println(question + "\nA: " + optionA + "\nB: " + optionB + "\nC: " + optionC + "\nD: " + optionD);
     }
 
+    
     public boolean isDrawn(){
         return isDrawn;        
     }
@@ -32,4 +32,9 @@ public class Question {
         isDrawn = true;
     }   
 
+
+    public char getCorrectOption(){
+        return correctOption;
+    }
+    
 }
