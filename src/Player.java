@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Player {
     
     private int id;
@@ -5,10 +7,10 @@ public class Player {
     private Score score;
 
 
-    public Player(int id, String name){
+    public Player(int id){
 
         this.id = id;
-        this.name = name;
+        this.name = setName();
         score = new Score();
 
     }
@@ -22,11 +24,27 @@ public class Player {
         return name;
     }
 
-    public int[] getScore(){
-        int[] score = new int[2];
-        score[0] = this.score.getPoints();
-        score[1] = this.score.getStrikes();
+    private String setName(){
+        
+        System.out.println("Please enter a name.(Maximum: 10 characters)\nPlayer-" + id + ": ");
+
+        try(Scanner consoleInput = new Scanner(System.in)){
+            String input = consoleInput.nextLine();
+            if(input.length()<=10){
+                return input;
+            }else{
+                System.out.println("Please try again.");
+                return setName();
+            }
+		}
+    }
+    //  The "setName"-method uses a Scanner to read in the desired "Player"-name as a String. (Maximum: 10 characters)
+
+    
+    public Score getScore(){
         return score;
     }
+
+    
     
 }
