@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,13 +9,13 @@ public class QuestionPool {
     public ArrayList<Question> questions = new ArrayList<>();
     //  The ArrayList "questions" holds the "Question"-objects.
 
-    public QuestionPool(){
+    public QuestionPool(File questionSetFile){
         
-        try (BufferedReader reader = new BufferedReader(new FileReader("questions.txt"))) {            
+        try (BufferedReader reader = new BufferedReader(new FileReader(questionSetFile))) {            
             String set;
 
             while((set = reader.readLine()) != null){
-                questions.add(new Question(set.split("#")));
+                questions.add(new Question(set.split(";")));
             }
             
             reader.close();          
