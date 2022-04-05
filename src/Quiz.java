@@ -157,7 +157,7 @@ public class Quiz {
 
     private void printScoreBoard(){
 
-        System.out.println("      SCOREBOARD      \n   NAME   | POINTS | STRIKES");
+        System.out.println("\n\n------------------------------\n           SCOREBOARD      \n   NAME   | POINTS | STRIKES");
 
         for(int playerID=0 ; playerID<playerAmount ; playerID++){
 
