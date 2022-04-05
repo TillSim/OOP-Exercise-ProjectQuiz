@@ -20,7 +20,7 @@ public class Question {
     
     
     public void print(){
-        System.out.println("\n------------------------------\n" + question + "\n\nA: " + optionA + "\nB: " + optionB + "\nC: " + optionC + "\nD: " + optionD + "\n------------------------------");
+        System.out.println("\n------------------------------\n" + question + "\nA: " + optionA + "\nB: " + optionB + "\nC: " + optionC + "\nD: " + optionD + "\n------------------------------");
     }
 
     

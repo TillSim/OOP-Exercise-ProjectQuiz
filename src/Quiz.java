@@ -43,8 +43,13 @@ public class Quiz {
 
                 if(isCorrectAnswer(activeQuestion, consoleInput, players.get(playerID-1))){
                     players.get(playerID-1).getScore().addPoint();
+                    System.out.println("\nCorrect answer! + 1 Point");
                 }else{
                     players.get(playerID-1).getScore().addStrike();
+                    System.out.println("\nWrong answer! + 1 Strike\nAnswer-" + activeQuestion.getCorrectOption() + " is the correct answer" );
+                    if(players.get(playerID-1).getScore().getStrikes() == 3){
+                        System.out.println(players.get(playerID-1).getName() + " is disqualified!");
+                    }
                 }
 
                playerID++;
