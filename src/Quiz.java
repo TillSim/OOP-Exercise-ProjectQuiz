@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -9,14 +10,14 @@ public class Quiz {
     private QuestionPool questionPool;
 
 
-    public Quiz(){
+    public Quiz(Scanner consoleInput, File questionSetFile){
 
-        questionPool = new QuestionPool();
-        playerAmount = setPlayerAmount();
-        questionAmount = setQuestionAmount();
+        questionPool = new QuestionPool(questionSetFile);
+        playerAmount = setPlayerAmount(consoleInput);
+        questionAmount = setQuestionAmount(consoleInput);
 
         for(int i=1 ; i<=playerAmount ; i++){
-            players.add(new Player(i));
+            players.add(new Player(i, consoleInput));
         }
         
     }
@@ -26,7 +27,7 @@ public class Quiz {
     */
 
 
-    public void run(){
+    public void run(Scanner consoleInput){
 
         int round = 1;
 
@@ -40,7 +41,7 @@ public class Quiz {
 
                 activeQuestion.print();
 
-                if(isCorrectAnswer(activeQuestion)){
+                if(isCorrectAnswer(activeQuestion, consoleInput, players.get(playerID-1))){
                     players.get(playerID-1).getScore().addPoint();
                 }else{
                     players.get(playerID-1).getScore().addStrike();
@@ -52,6 +53,9 @@ public class Quiz {
 
             round++;
         }
+
+        printScoreBoard();
+
     }
     /*
         The "run"-method controls process of the "Quiz":
@@ -61,23 +65,23 @@ public class Quiz {
     */
 
 
-    private int setPlayerAmount(){        
+    private int setPlayerAmount(Scanner consoleInput){        
 		
-		System.out.println("How many players are participating?(Maximum: " + questionPool.questions.size()/3 + " players)\nPlayers: ");
+		System.out.print("How many players are participating?(Maximum: " + questionPool.questions.size()/3 + " players)\nPlayers: ");
 
-		try(Scanner consoleInput = new Scanner(System.in)){
+		
             try{int input = consoleInput.nextInt();
                 if(input >= 1 && input <= questionPool.questions.size()/3){
                     return input;
                 }else{
                     System.out.println("Please try again.");
-                    return setPlayerAmount();
+                    return setPlayerAmount(consoleInput);
                 }
             }catch(InputMismatchException e){
                 System.out.println("Please try again.");
-                return setPlayerAmount();
+                return setPlayerAmount(consoleInput);
             }
-		}
+		
 
     }
     /*
@@ -86,22 +90,22 @@ public class Quiz {
         If the user-input is valid the function returns the integer value, else the function calls itself.
     */
 
-    private int setQuestionAmount(){
-        System.out.println("How many questions does each player has to answer?(At least 3 per player.Maximum " + questionPool.questions.size()/playerAmount +" questions)\nQuestions: ");
-
-		try(Scanner consoleInput = new Scanner(System.in)){
+    private int setQuestionAmount(Scanner consoleInput){
+        System.out.print("How many questions does each player has to answer?(At least 3 per player.Maximum " + questionPool.questions.size()/playerAmount +" questions)\nQuestions: ");
+        
+		
             try{int input = consoleInput.nextInt();
                 if(input >= 3 && input <= questionPool.questions.size()/playerAmount){
                     return input;
                 }else{
                     System.out.println("Please try again.");
-                    return setPlayerAmount();
+                    return setQuestionAmount(consoleInput);
                 }
 		    }catch(InputMismatchException e){
                 System.out.println("Please try again.");
-    			return setPlayerAmount();
+    			return setQuestionAmount(consoleInput);
             }
-		}
+		
     }
     /*
         The "setPlayerAmount" function prints the maximum and minimum number of possible "Questions" per "Player". (determined by number of "Questions" available in the "questionPool" and the "playerAmount")
@@ -112,7 +116,7 @@ public class Quiz {
 
     private Question drawRNDMquestion(){
 
-        int cachedIndex = Toolbox.generateRNDMnumber(questionPool.questions.size());
+        int cachedIndex = Toolbox.generateRNDMnumber(questionPool.questions.size()-1);
         
         if(questionPool.questions.get(cachedIndex).isDrawn()){
             return drawRNDMquestion();
@@ -127,12 +131,12 @@ public class Quiz {
         If the corresponding "Question" was not yet drawn, the function returns that "Question", else the function calls itself.
     */
 
-    private boolean isCorrectAnswer(Question question){
+    private boolean isCorrectAnswer(Question question, Scanner consoleInput, Player player){
 
-        System.out.println("Answer (A|B|C|D): ");
+        System.out.print("Answer " + player.getName() + ": ");
 
-        try(Scanner consoleInput = new Scanner(System.in)){
-            try{char input = consoleInput.nextLine().toLowerCase().charAt(0);
+        
+            try{char input = consoleInput.next().toLowerCase().charAt(0);
                 if(input == question.getCorrectOption()){
                     return true;
                 }else{
@@ -140,9 +144,9 @@ public class Quiz {
                 }
             }catch(InputMismatchException e){
                 System.out.println("Please try again.");
-                return isCorrectAnswer(question);
+                return isCorrectAnswer(question, consoleInput, player);
             }
-		}
+		
     }
     /*
         The "isCorrectAnswer" function prints the promt to enter an answer.
@@ -150,4 +154,16 @@ public class Quiz {
         If the entered answer matches the "correctOption" of the "Question" the function returns true, else the function returns false.
     */
 
+
+    private void printScoreBoard(){
+
+        System.out.println("      SCOREBOARD      \n   NAME   | POINTS | STRIKES");
+
+        for(int playerID=0 ; playerID<playerAmount ; playerID++){
+
+            players.get(playerID).printScore();
+            
+        } 
+
+    }
 }
