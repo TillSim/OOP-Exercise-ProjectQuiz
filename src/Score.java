@@ -27,10 +27,4 @@ public class Score {
        return strikes;
    }
    
-
-    public void printScore(int playerID){
-
-        System.out.println("Player-" + playerID + "   |   " + points + "   |   " + strikes);
-
-    }
 }
